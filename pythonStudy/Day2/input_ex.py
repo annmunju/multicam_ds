@@ -7,6 +7,7 @@ math = int(input('수학점수 입력 : '))
 
 sum = kor + eng + math
 avg = sum / 3
+
 print("총점 : %d" % sum)
 print("평균 : %.2f" % avg)
 
