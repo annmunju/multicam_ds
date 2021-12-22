@@ -16,7 +16,8 @@ print(odd_num, even_num)
 
 sumX = 0
 
-for i in range(1,101,3):
+for i in range(3,101,3):
     sumX += i
+    print(i)
 
 print(sumX)
