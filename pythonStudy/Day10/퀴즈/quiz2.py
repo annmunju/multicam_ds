@@ -6,8 +6,11 @@ num_ls = []
 lines = fr.readlines()
 for line in lines:
     num_str = line.rsplit()
+    if not num_str :
+        continue
     num_int = list(map(int, num_str))
     num_ls.append(num_int)
+
 
 fw = open('culc_num.txt', 'w')
 
