@@ -1,5 +1,7 @@
 yday = open('yesterday.txt', 'r')
 lyrics = yday.readlines()
+yday.close()
+
 words = []
 for line in lyrics:
     word = line.rsplit()

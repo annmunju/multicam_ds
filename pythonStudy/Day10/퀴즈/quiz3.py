@@ -23,4 +23,5 @@ while pick != 'q':
     elif pick == '2':
         fileName_r = input('멤버 명단을 저장된 파일명을 입력하세요. : ')
         output_member(fileName_r)
-    pick = input('저장 1, 출력 2, 종료 q : ')
+    else:
+        pick = input('저장 1, 출력 2, 종료 q : ')
