@@ -43,30 +43,34 @@ class Dog:
     def run(self):
         return '뛰는 중'
 
-dog1 = Dog('Large',5,'Black')
+    def printInfo(self,name='개',doing=0):
+        print(f'{name}의 품종 : {self.getBreed()}')
+        print(f'{name}의 나이 : {self.getAge()}')
+        print(f'{name}의 색상 : {self.getColor()}')
+        print(f'{name}의 크기 : {self.getSize()}')
+        if doing == 1 :
+            print(f'{name}은(는) 지금 {dog1.eat()}')
+        elif doing == 2 :
+            print(f'{name}은(는) 지금 {dog1.sleep()}')
+        elif doing == 3 :
+            print(f'{name}은(는) 지금 {dog1.sit()}')
+        elif doing == 4:
+            print(f'{name}은(는) 지금 {dog1.run()}')
+        else :
+            print(f'{name} 상태 모름')
+
+dog1 = Dog('','Large',5,'Black')
 dog1.setBreed('Neapolitan Mastiff')
-print(f'dog1의 품종 : {dog1.getBreed()}')
-print(f'dog1의 나이 : {dog1.getAge()}')
-print(f'dog1의 색상 : {dog1.getColor()}')
-print(f'dog1의 크기 : {dog1.getSize()}')
-print(f'dog1은 지금 {dog1.eat()}')
+dog1.printInfo('첫번째 멍멍이',1)
 
 print('-'*30)
 
-dog2 = Dog('Small',2,'White')
+dog2 = Dog('','Small',2,'White')
 dog2.setBreed('Maltese')
-print(f'dog2의 품종 : {dog2.getBreed()}')
-print(f'dog2의 나이 : {dog2.getAge()}')
-print(f'dog2의 색상 : {dog2.getColor()}')
-print(f'dog2의 크기 : {dog2.getSize()}')
-print(f'dog2은 지금 {dog2.run()}')
+dog1.printInfo('두번째 멍멍이',2)
 
 print('-'*30)
 
-dog3 = Dog('Midium',3,'Brown')
+dog3 = Dog('','Midium',3,'Brown')
 dog3.setBreed('Chow Chow')
-print(f'dog3의 품종 : {dog3.getBreed()}')
-print(f'dog3의 나이 : {dog3.getAge()}')
-print(f'dog3의 색상 : {dog3.getColor()}')
-print(f'dog3의 크기 : {dog3.getSize()}')
-print(f'dog3은 지금 {dog3.sit()}')
+dog1.printInfo('세번째 멍멍이',3)
