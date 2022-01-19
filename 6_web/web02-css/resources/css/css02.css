@@ -1,0 +1,66 @@
+/* 타입 선택자 */
+pre{
+    text-align: center;
+}
+/* id 선택자 */
+#s-id01{
+    color: hotpink;
+}
+#s-id02{
+    color: lightblue;
+}
+/* class 선택자 */
+.s-cls01{
+    background-color: steelblue;
+}
+.s-cls02{
+    background-color: tan;
+}
+
+/* id는 하나만, class는 여러개 속성을 가져올 수 있음 */
+
+*{
+    text-align: right;
+}
+
+/* 자식 선택자 */
+
+#atc>div>p{
+    color: cadetblue;
+}
+
+/* 인접 선택자 */
+span+pre {
+    background-color: lightcoral;
+}
+
+/* 하위 */
+#atc02 span{
+    color : chocolate
+}
+
+/* 속성 */
+p[title]{
+    background-color: gray;
+}
+
+/* 가상 클래스 선택자 */
+a:link{
+    color : green;
+    font-size: 15pt;
+}
+a:visited{
+    color : lightslategrey;
+}
+a:hover{
+    background-color: black;
+    color:white;
+}
+a:active{
+    background-color: yellow;
+    color: tomato;
+}
+input:checked{
+    width: 100px;
+    height: 100px;
+}

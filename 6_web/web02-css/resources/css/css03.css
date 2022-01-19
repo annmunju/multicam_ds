@@ -1,0 +1,17 @@
+div > h1{
+    font-weight: bold;
+    font-style: italic;
+    font-variant: small-caps;
+
+    font-size: 25pt;
+    line-height: 500%;
+}
+
+@font-face {
+    font-family: "Goyang";
+    src: url("/Users/anmunju/Documents/multicam_ds/6_web/web02-css/resources/fonts/Goyang.otf");
+}
+
+div+h1{
+    font-family: "Goyang";
+}
