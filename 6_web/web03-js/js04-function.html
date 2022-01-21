@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        function func01(){
+            alert("함수의 이름이 있습니다.");
+        }
+        var func02 = function(){
+            alert("함수에 이름이 없어요...")
+        }//var 변수 = 값의 형태 -> 함수가 값으로 사용됨(중요). 변수의 타입이 함수인것 (함수도 타입(형태)가 될 수 있음!!) 함수타입의 값을 변수에 저장
+        //값이 함수에 들어간 상태 (함수=값이다)
+
+        // alert(func02);
+        // func02();
+
+        function func03(){
+            /*
+            function test(){
+                alert("내부함수");
+            }
+            test();
+            */
+            (function(){
+                alert("즉시 실행 함수");
+            })(); // 익명함수(func02)에다가 func02();한것과 동일한 효과
+        }
+
+        function literalPrn(literal){ // literal => parameter
+            literal("안녕하세요. 함수 형태의 값!! 입니다."); //literal이 함수인 경우 함수의 파라미터로 "안녕하세요. 함수 형태의 값!! 입니다"를 넣으라는 뜻인 것이다
+
+        }
+
+        function func04(){
+            literalPrn(function(msg){alert(msg);}); //값function(msg)...=> argument을 가지고 literalPrn호출
+            //literal파라미터에 값(함수)이 저장됨
+            //변수();로 함수값 호출하듯이
+            //익명함수의 
+        }
+//함수형태의 값을 리턴해주고 있다
+        function closureFunc(val){
+            var suffix = "님, 안녕하세요~";
+            function innerFunc(){
+                alert(val + suffix + "잘 부탁 드립니다.");
+            }//내부함수에서 외부함수의 값/기능 등을 쓸 수 있도록 하는 것을 'closure'라고 함
+            return innerFunc; //(괄호)없고 함수 이름만 써져 있음, 함수를 값으로 사용한 것 => 함수를 변수에 저장해놓고 func02를 
+            //함수를 호출하지 않고 함수이름만 쓸 때=>함수 값 자체를 전달했다는 뜻, 함수가 값 자체로 저장되어 넘어갔다.
+        }
+        var closureTest01 = closureFunc("멀캠")
+    
+        function closureTest02(val){
+            closureFunc(val)();
+        }
+    </script>
+    
+</head>
+<body>
+    
+
+    <h1>function = 기능</h1>
+
+    <h2>함수의 종류</h2>
+    <p onclick="func01();">명시적 함수</p>
+    <p onclick="func02();">익명 함수</p> <!--func02 -> 선언한 값을 가져와라 func02() -> 함수 값을 가져와라 -->
+    <p onclick="func03();">즉시 실행 함수</p>
+    <p onclick="func04();">함수 리터럴</p>
+    <p onclick="closureTest01();">클로저: 외부함수에 접근 가능(변수 등)</p>
+    <p onclick="closureTest02('멀티캠퍼스');">연습</p>
+</body>
+</html>
