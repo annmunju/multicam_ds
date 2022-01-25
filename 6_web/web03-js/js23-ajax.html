@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function ajaxTest(){
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function(){
+                // 4 : 요청 완료
+                if(xhr.readyState == 4){
+                    // 200 : 정상 응답
+                    if(xhr.status == 200){
+                        // alert(xhr.responseText);
+                        var respXml = xhr.responseXML;
+                        // console.log(respXml.getElementsByTagName("ROW")[0].children)
+                        }
+                    var tableIndex = respXml.getElementsByTagName("ROW")[0].children
+                    // console.log(tableIndex[0].tagName)
+
+                    var tr = document.createElement("tr");
+
+                    for (var i =0; i < tableIndex.length; i++){
+                        var td = document.createElement("td");
+                        td.textContent = tableIndex[i].tagName;
+                        tr.appendChild(td);
+                        
+                    var table = document.getElementById("tb")
+                    table.appendChild(tr)
+                    }
+
+                    var tableValue = respXml.getElementsByTagName("ROW")
+
+                    for (var i=0; i<tableValue.length; i++){
+                        var tr = document.createElement("tr");
+                        for (var j=0; j<tableIndex.length; j++){
+                            var inputVal = tableValue[i].children[j].innerHTML
+                            var td = document.createElement("td");
+                            td.textContent = inputVal;
+                            tr.appendChild(td);
+                        }
+                        var table = document.getElementById("tb")
+                        table.appendChild(tr)
+                        
+                    }
+
+                }
+            }
+
+            // 해당 경로에 get 방식으로 요청.
+            xhr.open("GET", "emplist.xml");
+            xhr.send();
+
+            // 1. 테이블 인덱스 만들기
+
+
+
+        }
+    </script>
+</head>
+<body>
+
+    <!--
+        ajax : Asynchronous Javascript And Xml
+        비 동기 통신
+    -->
+    
+    <button onclick="ajaxTest()">ajax</button>
+
+    <table id="tb" border="1"></table>
+</body>
+</html>
