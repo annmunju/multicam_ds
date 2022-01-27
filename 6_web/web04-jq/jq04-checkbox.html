@@ -43,25 +43,15 @@
 
                 $("#result").append(total);
 
-                
-
             });
 
-            
-            
-            // if (checkTF == true){
-            //     $("input[name=all]").prop("checked", true)
-            // }
-            // if (checkTF == false){
-            //     $("input[name=all]").prop("checked", false)
-            // }
             
             $("input[name=chk]").click(function(){
             var total = $("input[name=chk]").length;
             var checked = $("input[name=chk]:checked").length;
 				
-            if(total != checked) $("input[name=all]").prop("checked", false);
-            else $("input[name=all]").prop("checked", true); 
+            if(total != checked) {$("input[name=all]").prop("checked", false)
+            } else {$("input[name=all]").prop("checked", true)}
             })
 
         });
@@ -69,16 +59,23 @@
         
 
         //allChk() 만들기
-        function allChk(){
-            var check = $("input[name=all]").prop("checked")
+        // function allChk(){
+        //     var check = $("input[name=all]").prop("checked")
             
-            if (check==true){
-                $("input[name=chk]").prop("checked",true)
-            }
-            else{
-                $("input[name=chk]").prop("checked",false)
-            }
+        //     if (check==true){
+        //         $("input[name=chk]").prop("checked",true)
+        //     }
+        //     else{
+        //         $("input[name=chk]").prop("checked",false)
+        //     }
            
+        // }
+
+        // 선생님 답안
+        function allChk(bool){
+            $("input[name=chk]").each(function(){
+                $(this).prop("checked", bool);
+            })
         }
 
         
