@@ -48,8 +48,8 @@
             $("a:eq(0)").click(function(e){
                 alert("a 클릭!");
                 // e.stopPropagation(); // 이후로 요소 전파는 멈춤. 이벤트 실행만 됨
-                // e.preventDefault();
-                return false;
+                e.preventDefault();
+                // return false;
             });
             
             $('p').click(function(a){
