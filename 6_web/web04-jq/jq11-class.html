@@ -19,7 +19,7 @@
                 $("img").toggleClass("onoff")
             })
 
-            $("img").hover(function(){
+            $("img").click(function(){
                 if($(this).hasClass("addsize")){
                     $(this).removeClass("addsize").attr("title","이미지 축소됨")
                 } else {
