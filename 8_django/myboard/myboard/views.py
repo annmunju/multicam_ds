@@ -3,31 +3,39 @@ from .models import MyBoard
 from django.utils import timezone
 
 def index(request):
-    return render(request, 'index.html', {'list': MyBoard.objects.all()})
+    return render(request, 'index.html', {'list': MyBoard.objects.all().order_by('-id')})
 
-def detail(request, id):
-    return render(request, 'detail.html', {'dto': MyBoard.objects.get(id=id)})
 
 def insert_form(request):
     return render(request, 'insert.html')
 
 def insert_res(request):
-    myname=request.POST['myname']
-    mytitle=request.POST['mytitle']
-    mycontent=request.POST['mycontent']
+    myname = request.POST['myname']
+    mytitle = request.POST['mytitle']
+    mycontent = request.POST['mycontent']
+
     result = MyBoard.objects.create(myname=myname, mytitle=mytitle, mycontent=mycontent, mydate=timezone.now())
+
     if result:
         return redirect('index')
-    else:
+    else :
         return redirect('insertform')
 
-def update_form(request, id):
-    return render(request, 'update.html', {'dto': MyBoard.objects.get(id=id)})
+def detail(request, id):
+    return render(request, 'detail.html', {'dto':MyBoard.objects.get(id=id)})
+
+def delete(request, id):
+    result_delete = MyBoard.objects.filter(id=id).delete()
+
+    if result_delete[0]:
+        return redirect('index')
+    else:
+        return redirect('detail/'+id)
 
 def update_res(request):
-    id=request.POST['id']
-    mytitle=request.POST['mytitle']
-    mycontent=request.POST['mycontent']
+    id = request.POST['id']
+    mytitle = request.POST['mytitle']
+    mycontent = request.POST['mycontent']
 
     myboard = MyBoard.objects.filter(id=id)
 
@@ -39,10 +47,5 @@ def update_res(request):
     else :
         return redirect('/updateform/'+id)
 
-def delete(request, id):
-    result_delete = MyBoard.objects.filter(id=id).delete()
-
-    if result_delete[0]:
-        return redirect('index')
-    else:
-        return redirect('detail/'+id)
+def update_form(request, id):
+    return render(request, 'update.html', {'dto':MyBoard.objects.get(id=id)})
