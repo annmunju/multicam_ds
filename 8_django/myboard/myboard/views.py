@@ -100,7 +100,7 @@ def login(request):
         mypassword = request.POST['mypassword']
 
         mymember = MyMember.objects.get(myname=myname)
-
+        # check_password : 복호화
         if check_password(mypassword, mymember.mypassword):
             request.session['myname'] = mymember.myname
             return redirect('/')
