@@ -1,4 +1,4 @@
-"""myboard_ex URL Configuration
+"""myboard URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -22,5 +22,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('insertform/', views.insert_form, name='insertform'),
     path('insertres/', views.insert_res),
-    path('detail/<int:id>', views.detail, name='detail'),
+    path('detail/<int:id>', views.detail),
+    path('delete/<int:id>', views.delete),
+    path('updateform/<int:id>', views.update_form, name='updateform'),
+    path('updateres/', views.update_res),
 ]
