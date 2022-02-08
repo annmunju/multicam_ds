@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import MyBoard, MyMember
 from django.utils import timezone
 from django.core.paginator import Paginator
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 
 
 def index(request):
@@ -90,3 +90,23 @@ def register(request):
         mymember.save()
 
         return redirect('/')
+
+def login(request):
+    if request.method == 'GET':
+        return render(request, 'login.html')
+
+    else :
+        myname = request.POST['myname']
+        mypassword = request.POST['mypassword']
+
+        mymember = MyMember.objects.get(myname=myname)
+
+        if check_password(mypassword, mymember.mypassword):
+            request.session['myname'] = mymember.myname
+            return redirect('/')
+        else:
+            return redirect('/login')
+
+def logout(request):
+    del request.session['myname']
+    return redirect('/')
