@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+
+    {% if not request.session.myname %}
+    <h1>Index</h1>
+    <h2>글 작성에 앞서 로그인을 해주세요</h2>
+    {% else %}
+    <h1>안녕하세요. {{ request.session.myname }}님!</h1>
+    {% endif %}
+
+    <table border="1">
+        <col width="50">
+        <col width="100">
+        <col width="500">
+        <col width="180">
+        <tr>
+            <th>No.</th>
+            <th>작성자</th>
+            <th>제목</th>
+            <th>작성일</th>
+        </tr>
+        {% if not list %}
+        <tr>
+            <th colspan="4">-----------작성된 글이 없습니다----------</th>
+        </tr>
+        {% else %}
+            {% for data in list %}
+            <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.myname }}</td>
+                <td><a href="#">{{ data.mytitle }}</a></td>
+                <td>{{ data.mydate | date:"Y-m-d h:i:s" }}</td>
+            </tr>
+            {% endfor %}
+        {% endif %}
+
+
+    {% if not request.session.myname %}
+    {% else %}
+        <tr>
+            <td colspan="4" align="right">
+                <input type="button" value="글작성" onclick="">
+            </td>
+        </tr>
+    {% endif %}
+
+    </table>
+
+</body>
+</html>
