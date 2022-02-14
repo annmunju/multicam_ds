@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <h1>Hello! {{ }} with mysql</h1>
+
+    <form action="/insertres/" method="post">{% csrf_token %}
+        <table border="1">
+            <col width="100">
+            <col width="200">
+            <col width="500">
+            <col width="200">
+            <tr>
+                <th>번호</th>
+                <th>작성자</th>
+                <th>제목</th>
+                <th>작성일</th>
+            </tr>
+            <tr>
+            {% if not list %}
+                <th colspan="4">----------작성된 글이 없습니다-----------</th>
+
+            {% else %}
+                {% for data in list %}
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            {% endif %}
+            </tr>
+        </table>
+    </form>
+
+</body>
+</html>

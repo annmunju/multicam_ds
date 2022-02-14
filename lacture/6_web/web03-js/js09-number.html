@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript">
+        function numberObj(){
+            // 값 자체가 저장되어 있는변수 : 리터럴 변수
+            var num01 = 3;
+            // alert(num01 + ':' + typeof(num01));
+            
+            // object
+            var num02 = new Number(3);
+            // alert(num02 + ":" + typeof(num02))
+            // alert(parseInt("1")+1);
+            // Not a Number
+            // alert(parseInt("a")+1);
+
+            var prop = prompt("숫자 입력해 주세요")
+            if (isNaN(prop)) {
+                alert("숫자가 아닙니다")
+            } else {
+                alert("숫자가 맞습니다")
+            }
+            
+        }
+        function randomNum(){
+            // Math.random() : 0 <= X < 1
+            // Math.floor() : 내림
+            // Math.round() : 반올림
+            // Math.ceil() : 올림
+
+            // 0 ~ 100
+            var hundred = Math.floor(Math.random() * 100)
+
+            // 10~100
+            var min = 10;
+            var max = 100;
+            var ran = Math.floor(Math.random() * (max-min) + min)
+            alert(ran);
+
+            // 1~46
+            var ranNum = Math.floor(Math.random() * 45 + 1)
+            alert(ranNum)
+            // 로또 생성해보기 (번호 중복되면 안됨!)
+        }
+
+        function randomBG(){
+            var rum = function(){
+                return Math.floor(Math.random() * 256);
+            }
+            document.body.style.backgroundColor = "rgb(" + rum() + "," + rum() + "," + rum() + ")"
+        }
+    </script>
+</head>
+<body>
+
+    <h1>숫자</h1>
+
+    <button onclick="numberObj();">숫자</button>
+    <br>
+    <button onclick="randomNum();">난수</button>
+    <br>
+    <button onclick="randomBG();">배경색 변환</button>
+    <br>
+    <button onclick="randomCircle();">랜덤 원 그리기</button>
+    <button onclick="circleArea();">원의 넓이/둘레</button>
+    <br>
+    원의 넓이 : <span id="area"></span>
+    원의 둘레 : <span id="len"></span>
+    <br>
+    <br>
+    <br>
+    <style>
+        #circle{
+            border: 1px solid red;
+            display: none;
+        }
+    </style>
+    <div id="circle"></div>
+    <script>
+        function randomCircle(){
+            var rnum = Math.floor(Math.random() * 200)
+            var circle = document.getElementById("circle")
+
+            circle.style.width = rnum + "px"
+            circle.style.height = rnum + "px"
+        
+            circle.style.borderRadius = Math.floor(rnum/2) + "px"
+            circle.style.display = "block"
+        }
+
+        function circleArea(){
+            // Math.PI
+            // 원의 넓이 : pi r^2
+            var circleWidth = document.getElementById("circle").style.width
+            var rnum = circleWidth.substring(0, circleWidth.length-2) / 2
+            // circleWidth.split('px')[0]
+            var circleA = Math.floor(rnum*rnum*Math.PI)
+            
+            document.getElementById("area").innerHTML = circleA
+
+            // 원의 둘레 : 2 r pi
+            var circleB = Math.floor(2*rnum*Math.PI)
+            document.getElementById("len").innerHTML = circleB
+
+            // alert(parseInt(circleWidth))
+        }
+    </script>
+    
+</body>
+</html>
