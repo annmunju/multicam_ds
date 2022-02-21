@@ -290,7 +290,8 @@ print(export_text(dt, feature_names=var_ls, decimals=3))
 # =============================================================================
 # =============================================================================
 
-
+import pandas as pd
+df3 = pd.read_csv('./Dataset/Dataset_03.csv')
 
 #%%
 
@@ -300,9 +301,18 @@ print(export_text(dt, feature_names=var_ls, decimals=3))
 # 정의할 때, 이상치에 해당하는 데이터는 몇 개인가? (답안 예시) 10
 # =============================================================================
 
+q1 = df3.copy()
 
+q1['forehead_ratio'] = q1['forehead_width_cm']/q1['forehead_height_cm']
 
+xbar = q1['forehead_ratio'].mean()
+std = q1['forehead_ratio'].std()
 
+UB = xbar + 3 * std
+LB = xbar - 3 * std
+
+outlier_data = q1[(q1['forehead_ratio'] > UB) | (q1['forehead_ratio'] < LB)]
+len(outlier_data)
 
 
 
