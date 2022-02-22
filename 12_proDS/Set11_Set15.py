@@ -24,7 +24,12 @@ Created on 2021
 # =============================================================================
 # =============================================================================
 
+import locale
+from operator import index
+import pandas as pd
+import numpy as np
 
+data11 = pd.read_csv('./Dataset/Dataset_11.csv')
 
 
 #%%
@@ -37,10 +42,15 @@ Created on 2021
 # 활용하시오.(답안 예시) 1
 # =============================================================================
 
+data11.columns
+# ['Country', 'Happiness_Rank', 'Happiness_Score', 'year']
+q1 = data11.groupby('Country').apply(len)
+q1.value_counts()
 
+(q1<3).sum()
+#len(q1[q1<3])
 
-
-
+sel_country = q1[q1 == 3].index
 
 
 
@@ -56,14 +66,16 @@ Created on 2021
 # 12월까지의 매출 총액을 의미한다. (답안 예시) Korea, Japan, China
 # =============================================================================
 
+q2 = data11[data11.Country.isin(sel_country)]
+q2_tab = pd.pivot_table(q2, 
+                        index='Country',
+                        columns='year',
+                        values='Happiness_Score')
 
+q2_tab['ratio'] = (q2_tab[2017]-q2_tab[2015])/2
 
-
-
-
-
-
-
+q2_tab['ratio'].nlargest(3).index
+# q2_tab.sort_values('ratio',ascending=False)[:3].index
 
 
 
@@ -82,16 +94,37 @@ Created on 2021
 # from statsmodels.formula.api import ols
 # from statsmodels.stats.anova import anova_lm
 
+from scipy.stats import f_oneway
+from statsmodels.formula.api import ols
+from statsmodels.stats.anova import anova_lm
+from statsmodels.stats.multicomp import pairwise_tukeyhsd # 다중비교, 사후검정
 
 
+q3 = data11[data11.Country.isin(sel_country)]
+
+q3_tab = pd.pivot_table(q3, 
+                        index='Country',
+                        columns='year',
+                        values='Happiness_Score')
+
+q3_out1 = f_oneway(q3_tab[2015], q3_tab[2016], q3_tab[2017])
+q3_out1
+
+# ols 이용 방식
+q3_out2 = ols('Happiness_Score~C(year)', q3).fit()
+
+q3_out2.summary()
+
+anova_lm(q3_out2)
 
 
+q3_out1.statistic
+anova_lm(q3_out2)['F'][0]
 
 
+tukey_out = pairwise_tukeyhsd(q3['Happiness_Score'], q3['year'])
 
-
-
-
+print(tukey_out)
 
 #%%
 
@@ -116,6 +149,16 @@ Created on 2021
 # =============================================================================
 # =============================================================================
 
+import pandas as pd
+import numpy as np
+
+data12 = pd.read_csv('./Dataset/Dataset_12.csv')
+
+data12.columns
+# ['Age', 'Gender', 'Dependent_Count', 'Education_Level', 'is_Married',
+    #    'Read_Book_per_Year', 'Income_Range']
+
+data12.dtypes
 
 #%%
 
@@ -125,7 +168,8 @@ Created on 2021
 # - 상관계수는 반올림하여 소수점 셋째 자리까지 기술하시오. (답안 예시) 0.123
 # =============================================================================
 
-
+data12.dtypes.value_counts()
+data12.columns[data12.dtypes != 'object']
 
 
 
@@ -396,8 +440,17 @@ Created on 2021
 # =============================================================================
 
 
+import pandas as pd
+import numpy as np
 
+df05 = pd.read_csv('./Dataset/Dataset_05_Mart_POS.csv')
+ls01 = pd.read_csv('./Dataset/Dataset_05_item_list.csv')
 
+df05.columns
+# ['Member_number', 'Date', 'itemDescription']
+
+ls01.columns
+# ['prod_id', 'prod_nm', 'alcohol', 'frozen']
 
 #%%
 
@@ -406,13 +459,9 @@ Created on 2021
 # 제품의 판매 개수는? (답안 예시) 1
 # =============================================================================
 
-
-
-
-
-
-
-
+pos01 = df05.copy()
+filt = pos01.Date == pos01['Date'].value_counts().idxmax()
+pos01[filt]['itemDescription'].value_counts().nlargest(1)
 
 
 
@@ -433,17 +482,30 @@ Created on 2021
 # =============================================================================
 
 
+pos2 = df05.copy()
 
+pd.to_datetime(pos2.Date).dt.year
 
+pos2['month'] = pd.to_datetime(pos2.Date).dt.month
+pos2['day'] = pd.to_datetime(pos2.Date).dt.day_name(locale= 'ko_kr')
+pos2['week'] = np.where(pos2['day'].isin(['금요일','토요일']), 1, 0)
 
+# import locale
+# locale.locale_alias
 
+merge1 = pd.merge(pos2, ls01, how='left', left_on='itemDescription', right_on='prod_nm')
 
+merge2 = merge1[merge1.month.isin([1,2,3])]
 
+merge3 = pd.pivot_table(merge2, index='Date', columns='week', values='alcohol', aggfunc='sum')
 
+merge3
 
+from scipy.stats import ttest_ind
 
+q2_out = ttest_ind(merge3[1].dropna(), merge3[0].dropna(), equal_var=False)
 
-
+q2_out.pvalue
 
 
 #%%
@@ -462,6 +524,23 @@ Created on 2021
 # =============================================================================
 
 
+top10 = pos2.itemDescription.value_counts().nlargest(10).index
+
+q3 = pos2[pos2.itemDescription.isin(top10)]
+
+q3.groupby(['Date', 'day'])['itemDescription'].apply(len)
+
+q3_tab = pd.pivot_table(q3, index=['Date', 'day'], values='itemDescription', aggfunc='count')
+
+q3_tab
+
+anova_out = ols('itemDescription~day', q3_tab).fit()
+
+from statsmodels.formula.api import ols
+from statsmodels.stats.anova import anova_lm
+
+
+anova_lm(anova_out)['PR(>F)'][0]
 
 
 
@@ -485,5 +564,4 @@ Created on 2021
 
 
 
-
-
+# %%

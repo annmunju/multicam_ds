@@ -40,6 +40,10 @@ Created on 2021
 # =============================================================================
 # =============================================================================
 
+import pandas as pd
+import numpy as np
+
+data6 = pd.read_csv('./Dataset/Dataset_06.csv')
 
 
 #%%
@@ -51,8 +55,10 @@ Created on 2021
 # =============================================================================
 
 
-
-
+q1_1 = data6[data6.waterfront==1]['price'].mean()
+q1_0 = data6[data6.waterfront==0]['price'].mean()
+q1_out = int(abs(q1_1-q1_0))
+q1_out
 
 
 
@@ -67,11 +73,11 @@ Created on 2021
 # 
 # =============================================================================
 
-
-
-
-
-
+var_ls = ['price', 'bedrooms', 'bathrooms', 'sqft_living', 'sqft_lot', 'floors', 'yr_built']
+var_ls
+q2 = data6[var_ls].corr().drop('price')['price']
+print(q2.idxmax())
+print(q2.idxmin())
 
 
 
@@ -88,17 +94,28 @@ Created on 2021
 
 # =============================================================================
 # (참고)
-# import pandas as pd
-# import numpy as np
-# from sklearn.linear_model import LinearRegression
-# from statsmodels.formula.api import ols
-# =============================================================================
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from statsmodels.formula.api import ols
 
+var_ls = data6.columns.drop(['id', 'date', 'zipcode', 'price'])
 
+form1 = 'price~' + '+'.join(var_ls)
 
+lm = ols(form1, data6).fit()
 
+print(lm)
 
+q3_out = lm.pvalues.drop('Intercept')
 
+q3_out1 = (q3_out < 0.05).sum()
+
+sel_var_ls = q3_out[q3_out < 0.05].index
+
+q3_out2 = (lm.params[sel_var_ls] < 0).sum()
+
+print(f'{q3_out1}, {q3_out2}')
 
 
 #%%
@@ -128,14 +145,15 @@ Created on 2021
 # =============================================================================
 # (참고)
 # #1
-# import pandas as pd
+import pandas as pd
 # #2
-# import scipy.stats as stats
+import scipy.stats as stats
 # #3
-# from sklearn.linear_model import LogisticRegression
-# Solver = ‘liblinear’, random_state = 12
+from sklearn.linear_model import LogisticRegression
+Solver = 'liblinear'; random_state = 12
 # =============================================================================
 
+data7 = pd.read_csv('./Dataset/Dataset_07.csv')
 
 #%%
 
@@ -166,6 +184,7 @@ Created on 2021
 # (답안 예시) 1.23
 # =============================================================================
 
+# 독립 2표본 t-test
 
 
 
@@ -189,7 +208,6 @@ Created on 2021
 # (로지스틱 회귀계수는 반올림하여 소수점 둘째 자리까지 / Intercept는 제외)
 # (답안 예시) abc, 0.12
 # =============================================================================
-
 
 
 
@@ -410,14 +428,18 @@ Created on 2021
 # =============================================================================
 # (참고)
 # #1
-# import pandas as pd
-# import numpy as np
+import pandas as pd
+import numpy as np
 # #2
-# import scipy.stats as ststs
+import scipy.stats as ststs
 # #3
-# from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression
 # =============================================================================
 
+data10 = pd.read_csv('./Dataset/Dataset_10.csv')
+data10 = data10[['model', 'engine_power', 'age_in_days', 'km', 'previous_owners','price']]
+# data.dropna(axis=1, how='all')
+data10.head()
 
 #%%
 
@@ -430,14 +452,16 @@ Created on 2021
 # =============================================================================
 
 
+# q1 = data10[(data10.previous_owners == 1) & (data10.engine_power == 51)]
+# q1_pivot = pd.pivot_table(q1, index=['model','age_in_days'], values='km', aggfunc='mean')
+# round(q1_pivot.min() / q1_pivot.max(), 2) # 0.05
 
+q1 = data10[(data10['previous_owners'] == 1) & (data10['engine_power'] == 51)]
 
+q1_out1 = q1.groupby('model')[['age_in_days', 'km']].mean()
+q1_out1['day'] = q1_out1['km']/q1_out1['age_in_days']
 
-
-
-
-
-
+q1_out1['day'].min()/q1_out1['day'].max()
 
 
 
@@ -452,13 +476,24 @@ Created on 2021
 # (답안 예시) 0.23, Y
 # =============================================================================
 
+max_g = q1_out1['day'].idxmax()
+min_g = q1_out1['day'].idxmin()
 
+q2 = data10.copy()
+q2['day'] = q2['km'] / q2['age_in_days']
 
+max_data = q2[q2.model == max_g]['day']
+min_data = q2[q2.model == min_g]['day']
 
+from scipy.stats import ttest_ind
 
+q2_out = ttest_ind(max_data, min_data, equal_var=True)
 
+# [참고] 등분산 검정
+# bartlett(max_data, min_data)
+# 결과 : BartLettResult(statistic=2.83209582...)
 
-
+q2_out.pvalue #0.13, N
 
 
 #%%
@@ -474,8 +509,21 @@ Created on 2021
 # model = pop이고 이전 소유자수가 2명인 데이터만을 이용하여 회귀모델을 생성하시오.
 
 
+q3 = data10[data10.previous_owners == 2]
 
+model_list = q3.model.unique()
 
+from sklearn.linear_model import LinearRegression
+
+var_ls = ['engine_power', 'age_in_days', 'km']
+
+for i in model_list:
+    temp = q3[q3.model == i]
+    globals()['lm_'+i] = LinearRegression().fit(temp[var_ls], temp['price'])
+
+eval('lm_'+i)
+
+lm_pop.predict([[51, 400, 9500]])
 
 
 
