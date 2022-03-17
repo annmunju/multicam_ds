@@ -28,14 +28,22 @@ Created on 2021
 # =============================================================================
 # =============================================================================
 
-from encodings import normalize_encoding
-from locale import normalize
 import pandas as pd
-import numpy as np
 
-df = pd.read_csv("./DataSet/DataSet_01.csv")
-df.info()
-df.columns
+df01 = pd.read_csv('./Dataset/Dataset_01.csv')
+
+df01
+#
+#
+#
+# from encodings import normalize_encoding
+# from locale import normalize
+# import pandas as pd
+# import numpy as np
+#
+# df = pd.read_csv("./DataSet/DataSet_01.csv")
+# df.info()
+# df.columns
 
 #%%
 
@@ -43,11 +51,7 @@ df.columns
 # 1. 데이터 세트 내에 총 결측값의 개수는 몇 개인가? (답안 예시) 23
 # =============================================================================
 
-df.isna().sum().sum()
-
-# 결측치가 있는 행 개수
-df.isna().any(axis=1).sum()
-
+df01.isnull().sum().sum()
 
 
 #%%
@@ -59,14 +63,18 @@ df.isna().any(axis=1).sum()
 # 자리에서 반올림하여 소수점 넷째 자리까지 기술하시오. (답안 예시) 0.1234
 # =============================================================================
 
-var_ls = ['TV', 'Radio', 'Social_Media', 'Sales']
 
-q2 = df.corr().drop('Sales')['Sales'].abs()
+round(df01.corr()['Sales'].sort_values(ascending=False)[1],4)
 
-round(q2.max(),4) # 최대값
-q2.idxmax() # 인덱스명
-q2.argmax() # 위치번호
-q2.nlargest(1)
+
+# var_ls = ['TV', 'Radio', 'Social_Media', 'Sales']
+
+# q2 = df.corr().drop('Sales')['Sales'].abs()
+
+# round(q2.max(),4) # 최대값
+# q2.idxmax() # 인덱스명
+# q2.argmax() # 위치번호
+# q2.nlargest(1)
 
 
 #%%
@@ -79,47 +87,62 @@ q2.nlargest(1)
 # 이하는 버리고 소수점 셋째 자리까지 기술하시오. (답안 예시) 0.123
 # =============================================================================
 
+import numpy as np
+
 var_ls = [ 'TV', 'Radio', 'Social_Media']
 
-q3 = df.dropna()
+df01 = df01.dropna()
 
 from sklearn.linear_model import LinearRegression
-from statsmodels.formula.api import ols
-from statsmodels.api import OLS, add_constant
 
-lm = LinearRegression(fit_intercept=True).fit(q3[var_ls], q3['Sales'])
+lr_reg = LinearRegression()
 
-# q3[['Sales']].shape()
-q3['Sales']
+lr_reg.fit(X=df01[var_ls], y=df01['Sales'])
 
-dir(lm)
+np.round(sorted(lr_reg.coef_, reverse=True),4)
 
-lm.intercept_ #상수항/절편
-lm.coef_ #회귀계수
 
-# ols
-# ols(식, 데이터).fit() 식: 'y~x1+x2+x3-1'
 
-form1 = 'Sales~'+'+'.join(var_ls)
+# lr_reg.feature_names_in_
 
-print(form1)
 
-q3_out = ols(form1, q3).fit()
+# from sklearn.linear_model import LinearRegression
+# from statsmodels.formula.api import ols
+# from statsmodels.api import OLS, add_constant
 
-dir(q3_out)
+# lm = LinearRegression(fit_intercept=True).fit(q3[var_ls], q3['Sales'])
 
-q3_out.summary()
+# # q3[['Sales']].shape()
+# q3['Sales']
 
-# [참고] 유의미한 변수 찾기
-q3_out.pvalues[q3_out.pvalues < 0.05].index
+# dir(lm)
 
-dir(q3_out)
+# lm.intercept_ #상수항/절편
+# lm.coef_ #회귀계수
 
-outlier_score = q3_out.outlier_test()
-q3[outlier_score['bonf(p)'] < 0.05]
+# # ols
+# # ols(식, 데이터).fit() 식: 'y~x1+x2+x3-1'
 
-q3_out2 = OLS(q3['Sales'], add_constant(q3[var_ls])).fit()
-q3_out2.summary()
+# form1 = 'Sales~'+'+'.join(var_ls)
+
+# print(form1)
+
+# q3_out = ols(form1, q3).fit()
+
+# dir(q3_out)
+
+# q3_out.summary()
+
+# # [참고] 유의미한 변수 찾기
+# q3_out.pvalues[q3_out.pvalues < 0.05].index
+
+# dir(q3_out)
+
+# outlier_score = q3_out.outlier_test()
+# q3[outlier_score['bonf(p)'] < 0.05]
+
+# q3_out2 = OLS(q3['Sales'], add_constant(q3[var_ls])).fit()
+# q3_out2.summary()
 
 
 #%%
